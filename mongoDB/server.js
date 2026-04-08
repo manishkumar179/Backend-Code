@@ -7,8 +7,8 @@ app.use(express.json())
 connectDB()
 
 app.post("/register" , async (req,res)=>{
-    let { name , email , password , mobile} = req.body;
-
+    let {name,email,password,mobile} = req.body;
+    
     if(!name || !email || !password || !mobile){
         return res.json({
             message:"All fields are required"
@@ -26,7 +26,6 @@ app.post("/register" , async (req,res)=>{
         message:"User Registered",
         user,
     })
-
 })
 
 app.listen(3000, ()=>{
