@@ -40,7 +40,7 @@ const App = () => {
 
 
   return (
-    <div>
+    <div className='form' >
       <form onSubmit={handleFormSubmit} >
         <input onChange={handleChange} name='name'   type="text" placeholder='Enter name' /> <br /> <br />
         <input onChange={handleChange} name='email' type="text" placeholder='Enter email' /> <br /><br />
@@ -54,8 +54,11 @@ const App = () => {
       <div>
         {
           users.map((elem , indx)=>{
-            return <div>
+            return <div className='main' >
               <h1>{elem.name}</h1>
+              <h1>{elem.email}</h1>
+              <h1>{elem.password}</h1>
+              <h1>{elem.mobile}</h1>
             </div>
           })
         }
