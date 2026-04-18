@@ -15,9 +15,11 @@ let userSchema = new mongoose.Schema({
         required:true
     },
     mobile:{
-        type:String,
+        type:Number,
         required:true
     }
+},{
+    timestamps:true
 })
 
 let UserModel = mongoose.model("users" , userSchema);
