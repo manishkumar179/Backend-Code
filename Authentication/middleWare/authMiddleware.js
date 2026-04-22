@@ -17,8 +17,8 @@ let authMiddleware = async (req,res,next)=>{
             })
         }
 
-        let users = await UserModel.findById(decode.id);
-        req.users = users
+        let user = await UserModel.findById(decode.id);
+        req.user = user;
         next();
 
 

@@ -61,15 +61,15 @@ let loginController = async (req, res) => {
       })
     }
 
-    let isUserExisted = await UserModel.findOne({email});
+    let user = await UserModel.findOne({email});
 
-    if(!isUserExisted){
+    if(!user){
       return res.status(404).json({
         message:"User not found"
       })
     }
 
-    let checkPass = await bcrypt.compare(password , isUserExisted.password);
+    let checkPass = await bcrypt.compare(password , user.password);
 
     if(!checkPass){
       return res.status(401).json({
@@ -77,14 +77,14 @@ let loginController = async (req, res) => {
       })
     }
 
-    let token = jwt.sign({id:isUserExisted._id}, process.env.JWT_SECRET_KEY , {expiresIn:"1h"})
+    let token = jwt.sign({id:user._id}, process.env.JWT_SECRET_KEY , {expiresIn:"1h"})
 
     res.cookie("token", token);
 
     return res.status(200).json({
       success:true,
       message:"User LoggedIn",
-      users
+      user
     })
 
 
@@ -93,14 +93,44 @@ let loginController = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       success:false,
-      message:"Internal server error",
+      message:"Internal server error ",
       error
     })
   }
 };
 
 
+
+let logoutController = async (req,res)=>{
+  try {
+    let user_id = req.user._id;
+    if(!user_id){
+      return res.status(404).json({
+        message:"User not found "
+      })
+    }
+
+
+    res.clearCookie("token");
+
+    return res.status(200).json({
+      message: "User logged out",
+    });
+
+
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error,
+    });
+  }
+}
+
+
 module.exports = {
     registerController,
-    loginController
+    loginController,
+    logoutController
 }
