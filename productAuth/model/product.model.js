@@ -26,6 +26,8 @@ let productSchema = new mongoose.Schema({
         enum:["MENS", "WOMENS" , "KIDS"],
         default:"MENS"
     }
+},{
+    timestamps:true
 })
 
 let ProductModel = mongoose.model("product" , productSchema)
