@@ -10,7 +10,19 @@ let router = express.Router()
 router.post("/create-product" ,authMiddleware , adminMiddleware, productController);
 router.get("/" , getProductControllers);
 
-router.post("/get-image" ,upload.single("image") , (req,res)=>{
+
+//get single image at a time
+// router.post("/get-image" ,upload.single("image") , (req,res)=>{
+//     let data = req.file;
+
+//     console.log(data);
+
+//     return res.send("image milgaya")
+// })
+
+// multiple file at a time
+
+router.post("/get-image" ,upload.array("images" , 5) , (req,res)=>{
     let data = req.file;
 
     console.log(data);
