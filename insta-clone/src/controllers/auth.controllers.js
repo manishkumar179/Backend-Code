@@ -42,6 +42,49 @@ let registerController = async (req, res) => {
   }
 };
 
+
+let loginController = async (req,res)=>{
+  try {
+    let {username , password} = req.body
+    if(!username || !password){
+      return res.status(400).json({
+        message:"All fields are required"
+      })
+    }
+
+    let isExist = await UserModel.findOne({username});
+    if(!isExist){
+      return res.status(404).json({
+        message:"User not found"
+      })
+    }
+
+    let checkPass = isExist.comparePassword(password);
+    if(!checkPass){
+      return res.status(401).json({
+        message:"Invalid Credentials"
+      })
+    }
+
+    let token = isExist.generateJWT();
+
+    res.cookie("token" , token);
+
+
+    return res.status(200).json({
+      message: "User Loggedin successfully",
+      user: isExist,
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      message:"Interval server error"
+    })
+  }
+}
+
+
 module.exports = {
-    registerController
+    registerController,
+    loginController
 }
