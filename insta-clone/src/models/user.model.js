@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 let jwt = require("jsonwebtoken");
-let bcrypt = require("bcrypt")
+let bcrypt = require("bcrypt");
+
+
 
 let userSchema = new mongoose.Schema(
   {
@@ -62,6 +64,7 @@ let userSchema = new mongoose.Schema(
 );
 
 
+
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     return next();
@@ -72,6 +75,8 @@ userSchema.pre("save", async function (next) {
     console.log("error in pre method", error);
   }
 });
+
+
 
 userSchema.methods.generateJWT = function () {
   let token = jwt.sign(
@@ -86,10 +91,13 @@ userSchema.methods.generateJWT = function () {
   return token;
 };
 
+
+
 userSchema.methods.comparePassword = async function (password) {
   let checkPass = await bcrypt.compare(password, this.password);
   return checkPass;
 };
+
 
 
 let UserModel = mongoose.model("users", userSchema);
