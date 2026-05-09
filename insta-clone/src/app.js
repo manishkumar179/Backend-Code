@@ -20,15 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/auth" , authRoutes);
 app.use("/api/post" , postRoutes )
 
-app.post("/send-mail" ,async (req,res)=>{
-          
-    await sendMailTo("mk0437271@gmail.com" ,"I am software developer", "<h1>I am studying Mern in Sheryians Coding School</h1>")
 
-    res.status(200).json({
-            success: true,
-            message: "Mail sent successfully"
-        });
-})
 
 
 module.exports  =  app
