@@ -1,6 +1,7 @@
 const UserModel = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const sendMailTo = require("../services/mail.service");
+const bcrypt = require("bcrypt")
 
 let registerController = async (req, res) => {
   try {
@@ -87,14 +88,16 @@ let loginController = async (req,res)=>{
 
 let forgetPasswordController = async (req,res)=>{
   try {
-    let {email} = req.body
+    let {email} = req.body;
+
     if(!email){
       return res.status(404).json({
         message:"Email not found"
       })
     }
 
-    let isExisted = await UserModel.findOne({email})
+    let isExisted = await UserModel.findOne({email});
+
     if(!isExisted){
       return res.status(404).json({
         message:"User not found with this email"
@@ -111,6 +114,7 @@ let forgetPasswordController = async (req,res)=>{
       message: "Reset link sent",
     });
 
+
   } catch (error) {
     return res.status(500).json({
       message:"Internal server error",
@@ -120,11 +124,11 @@ let forgetPasswordController = async (req,res)=>{
 }
 
 
-
 let resetPasswordController = async (req,res)=>{
   try {
 
-    let token = req.params.token
+    let token = req.params.token;
+
     if(!token){
       return res.status(400).json({
         message:"Invalid request"
@@ -147,8 +151,52 @@ let resetPasswordController = async (req,res)=>{
       });
 
     
-    return res.render("reset.ejs",{id:user._id});
+    return res.render("reset.ejs",{id: user._id});
 
+  } catch (error) {
+    console.log("Error in reset reset password api ->" , error)
+    return res.status(500).json({
+      message:"Internal server error"
+    })
+  }
+}
+
+
+let updatePasswordController = async (req,res)=>{
+  try {
+
+    let userId = req.params.userId;
+
+    if(!userId){
+      return res.status(404).json({
+        message:"Invalid user"
+      })
+    
+      let {password} = req.body
+
+      if(!password){
+        return res.status(400).json({
+          message:"Invalid request"
+        })
+      }
+
+      // let hashPass = await bcrypt.hash(password , 10);
+
+      let updateUser = await UserModel.findByIdAndUpdate(userId , 
+        {password:hashPass},
+        {
+          new:true
+        }
+      )
+
+      return res.status(200).json({
+      message: "Password updated successfully",
+      // user:updateUser
+    });
+    
+
+    
+    }
   } catch (error) {
     console.log("Error in reset password api ->" , error)
     return res.status(500).json({
@@ -162,5 +210,6 @@ module.exports = {
     registerController,
     loginController,
     forgetPasswordController,
-    resetPasswordController
+    resetPasswordController,
+    updatePasswordController
 }

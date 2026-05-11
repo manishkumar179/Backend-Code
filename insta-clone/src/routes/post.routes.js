@@ -5,7 +5,8 @@ const { createPostController } = require("../controllers/post.controllers");
 
 let router = express.Router()
 
-router.post("/create" , authMiddleware ,upload.array("images" , 5), createPostController);
+router.post("/create" , authMiddleware , upload.array("images" , 5), createPostController);
+
 
 
 module.exports = router
