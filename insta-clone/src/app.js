@@ -2,7 +2,8 @@ require("dotenv").config();
 let express = require("express")
 const connectDB = require("./config/db")
 let authRoutes = require("./routes/auth.routes");
-let postRoutes = require("./routes/post.routes")
+let postRoutes = require("./routes/post.routes");
+let userRoutes = require("./routes/user.route")
 const cookieParser = require("cookie-parser");
 const path = require("path");
 const sendMailTo = require("./services/mail.service");
@@ -18,7 +19,8 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/auth" , authRoutes);
-app.use("/api/post" , postRoutes )
+app.use("/api/post" , postRoutes );
+app.use("/api/user" , userRoutes)
 
 
 

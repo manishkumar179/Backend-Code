@@ -37,8 +37,80 @@ let createPostController = async (req, res) => {
 };
 
 
+let getAllPostController = async (req, res) => {
+  try {
+    let allPosts = await PostModel.find().populate("likes");
+
+    if (!allPosts.length)
+      return res.status(204).json({
+        message: "Posts fetched successfully",
+        posts: allPosts,
+      });
+
+    return res.status(200).json({
+      message: "posts fetched successfully",
+      posts: allPosts,
+    });
+
+    // return res.render("index.ejs", { posts: allPosts });
+  } catch (error) {
+    console.log("error in get post", error);
+    return res.status(500).json({
+      message: "internal server error",
+    });
+  }
+};
+
+
+let likeController = async (req,res)=>{
+  try {
+    let postId = req.params.postId;
+
+    if (!postId)
+      return res.status(404).json({
+        message: "post id not found",
+      });
+
+       let post = await PostModel.findById(postId);
+
+       if (post.likes.includes(req.user._id)) {
+      await PostModel.findByIdAndUpdate(
+        postId,
+        {
+          $pull: { likes: req.user._id },
+        },
+        {
+          new: true,
+        }
+      );
+    } else {
+      await PostModel.findByIdAndUpdate(
+        postId,
+        {
+          $push: { likes: req.user._id },
+        },
+        {
+          new: true,
+        }
+      );
+    }
+
+    return res.status(200).json({
+      message: "likes added",
+      post,
+    });
+
+  } catch (error) {
+    console.log("Error in likes  api ->" , error)
+    return res.status(500).json({
+      message:"Internal server error"
+    })
+  }
+}
 
 module.exports = {
-    createPostController
+    createPostController,
+    getAllPostController,
+    likeController,
 }
  
