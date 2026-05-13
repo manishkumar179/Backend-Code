@@ -7,6 +7,7 @@ let userRoutes = require("./routes/user.route")
 const cookieParser = require("cookie-parser");
 const path = require("path");
 const sendMailTo = require("./services/mail.service");
+const errorMiddleware = require("./middleware/error.middleware");
 connectDB();
 
 let app = express()
@@ -24,5 +25,5 @@ app.use("/api/user" , userRoutes)
 
 
 
-
+app.use(errorMiddleware)
 module.exports  =  app

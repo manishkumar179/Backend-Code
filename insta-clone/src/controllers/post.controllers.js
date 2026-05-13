@@ -1,5 +1,6 @@
 const PostModel = require("../models/post.model");
 const sendToIK = require("../services/storage.service");
+const ApiError = require("../utils/apiError");
 
 let createPostController = async (req, res) => {
   try {
@@ -61,6 +62,24 @@ let getAllPostController = async (req, res) => {
   }
 };
 
+let getSinglePostController = async (req,res)=>{
+  try {
+    let postId = req.params.postId;
+
+    let post = await PostModel.findById(postId);
+
+    if(!post) throw new Error("Gadbad in post fetch");
+
+    res.send(post);
+
+    
+  } catch (error) {
+    console.log("Error in Get single post:-  " , error)
+
+    throw new ApiError(500 , "Internal server error")
+  }
+}
+
 
 let likeController = async (req,res)=>{
   try {
@@ -111,6 +130,7 @@ let likeController = async (req,res)=>{
 module.exports = {
     createPostController,
     getAllPostController,
+    getSinglePostController,
     likeController,
 }
  
