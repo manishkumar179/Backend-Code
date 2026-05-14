@@ -24,6 +24,6 @@ app.use("/api/post" , postRoutes );
 app.use("/api/user" , userRoutes)
 
 
-
+// errorMiddleware--
 app.use(errorMiddleware)
 module.exports  =  app

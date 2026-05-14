@@ -1,6 +1,8 @@
 const PostModel = require("../models/post.model");
 const sendToIK = require("../services/storage.service");
 const ApiError = require("../utils/apiError");
+const ApiResponse = require("../utils/apiResponse");
+const asyncHandler = require("../utils/asyncHandler");
 
 let createPostController = async (req, res) => {
   try {
@@ -38,8 +40,8 @@ let createPostController = async (req, res) => {
 };
 
 
-let getAllPostController = async (req, res) => {
-  try {
+let getAllPostController = asyncHandler(async (req, res) => {
+  
     let allPosts = await PostModel.find().populate("likes");
 
     if (!allPosts.length)
@@ -48,37 +50,28 @@ let getAllPostController = async (req, res) => {
         posts: allPosts,
       });
 
-    return res.status(200).json({
-      message: "posts fetched successfully",
-      posts: allPosts,
-    });
+    return res
+    .status(200)
+    .json(new ApiResponse(200 , "Post fetched successfully" , allPosts))
 
     // return res.render("index.ejs", { posts: allPosts });
-  } catch (error) {
-    console.log("error in get post", error);
-    return res.status(500).json({
-      message: "internal server error",
-    });
-  }
-};
+  
+})
 
-let getSinglePostController = async (req,res)=>{
-  try {
+
+
+let getSinglePostController = asyncHandler(async (req,res)=>{
+  
     let postId = req.params.postId;
 
     let post = await PostModel.findById(postId);
 
-    if(!post) throw new Error("Gadbad in post fetch");
+    if(!post) throw new ApiError(404, "Post not found");
 
     res.send(post);
 
-    
-  } catch (error) {
-    console.log("Error in Get single post:-  " , error)
 
-    throw new ApiError(500 , "Internal server error")
-  }
-}
+})
 
 
 let likeController = async (req,res)=>{
@@ -126,6 +119,8 @@ let likeController = async (req,res)=>{
     })
   }
 }
+
+
 
 module.exports = {
     createPostController,

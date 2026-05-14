@@ -1,16 +1,9 @@
-let errorMiddleware  = (err , req , res , next)=>{
+let errorMiddleware = (err, req, res, next) => {
 
-    console.log("Status Code:-  " , err.statusCode);
-
-    console.log("Error in middleware :- ", err.message);
-
-    res.status(err.statusCode).json({
-    message: err.message,
+  res.status(err.statusCode).json({
     success: false,
+    message: err.message || "Internal server error",
   });
+};
 
-
-}
-
-module.exports = errorMiddleware
-
+module.exports = errorMiddleware;
