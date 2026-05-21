@@ -193,7 +193,7 @@ let updatePasswordController = async (req,res)=>{
       message: "Password updated successfully",
       // user:updateUser
     });
-    
+      
 
     
     }

@@ -39,8 +39,22 @@ const App = () => {
   }
 
 
+  let handleGoogleAuth = ()=>{
+    window.location.href='http://localhost:3000/api/auth/google'
+  }
+
   return (
-    <div className='form' >
+
+    
+    <div className='form ' >
+
+    <div>
+      <button onClick={handleGoogleAuth} >Continue with Google</button>
+    </div>
+<br />
+<br />
+
+
       <form onSubmit={handleFormSubmit} >
         <input onChange={handleChange} name='name'   type="text" placeholder='Enter name' /> <br /> <br />
         <input onChange={handleChange} name='email' type="text" placeholder='Enter email' /> <br /><br />
