@@ -33,7 +33,7 @@ let registerController = asyncHandler(async (req, res) => {
 
 let loginController = asyncHandler(async(req,res)=>{
 
-  let { accessToken, refreshToken, newUser } = await loginService(req.body);
+  let { accessToken, refreshToken, isExisted } = await loginService(req.body);
 
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
@@ -51,7 +51,7 @@ let loginController = asyncHandler(async(req,res)=>{
 
     return res
     .status(201)
-    .json(new ApiResponse("user registered successfully", newUser));
+    .json(new ApiResponse("user registered successfully", isExisted));
 
 
 })
@@ -72,6 +72,8 @@ let getAccessTokenController = asyncHandler(async (req, res) => {
 
   return res.status(200).json(new ApiResponse("access token generated"));
 });
+
+
 
 module.exports = {
     registerController,
